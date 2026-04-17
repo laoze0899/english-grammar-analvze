@@ -66,15 +66,6 @@ npm start
 3. 等待 AI 分析完成
 4. 查看详细的分析结果
 
-### 示例句子
-
-- 简单句: `The quick brown fox jumps over the lazy dog.`
-- 完成进行时: `I have been studying English for three years.`
-- 虚拟语气: `If I had known about the meeting, I would have attended it.`
-- 定语从句: `The book which was written by a famous author became a bestseller.`
-- 宾语从句: `She asked me where I was going after work.`
-- 非谓语动词: `Having finished his homework, he went out to play.`
-
 ## 🔧 环境变量
 
 可以通过环境变量配置默认值：
