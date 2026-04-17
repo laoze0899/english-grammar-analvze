@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 英语语法分析器 | English Grammar Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <h1>AI 英语语法分析器</h1>
+            </div>
+            <p class="subtitle" id="subtitleText">Powered by Local AI Model</p>
+            <button id="settingsBtn" class="settings-btn" title="设置">
+                ⚙️
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="input-header">
+                    <h2>📝 输入英语句子</h2>
+                    <span class="char-count" id="charCount">0 字符</span>
+                </div>
+                <textarea 
+                    id="sentenceInput" 
+                    placeholder="请输入要分析的英语句子...&#10;&#10;例如: The quick brown fox jumps over the lazy dog.&#10;或者: I have been studying English for three years."
+                    rows="4"
+                ></textarea>
+                <div class="button-group">
+                    <button id="analyzeBtn" class="btn btn-primary">
+                        <span class="btn-icon">🔍</span>
+                        <span>开始分析</span>
+                    </button>
+                    <button id="clearBtn" class="btn btn-secondary">
+                        <span class="btn-icon">🗑️</span>
+                        <span>清空</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <section class="loading-section" id="loadingSection" style="display: none;">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>AI 正在分析语法结构...</p>
+                </div>
+            </section>
+
+            <!-- Result Section -->
+            <section class="result-section" id="resultSection" style="display: none;">
+                <div class="result-header">
+                    <h2>📊 分析结果</h2>
+                    <div class="result-meta">
+                        <span id="analyzedSentence" class="analyzed-sentence"></span>
+                        <span id="modelName" class="model-name"></span>
+                    </div>
+                </div>
+                <div class="result-content" id="resultContent">
+                    <!-- Analysis result will be rendered here -->
+                </div>
+                <div class="result-actions">
+                    <button id="copyBtn" class="btn btn-outline">
+                        <span class="btn-icon">📋</span>
+                        <span>复制结果</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Error Section -->
+            <section class="error-section" id="errorSection" style="display: none;">
+                <div class="error-content">
+                    <span class="error-icon">⚠️</span>
+                    <h3>分析出错</h3>
+                    <p id="errorMessage"></p>
+                    <div class="error-help">
+                        <h4>请检查以下事项：</h4>
+                        <ul id="errorHelpList">
+                            <li>确保 LMStudio 已经启动并运行</li>
+                            <li>确保已加载 AI 模型</li>
+                            <li>确保 LMStudio 的 API 端口为 1234</li>
+                            <li>检查 LMStudio 的本地服务器是否已启用</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🎓 本工具使用 AI 模型进行英语语法分析，帮助学习者深入理解英语句子结构</p>
+            <p class="footer-tech">技术栈: Node.js + Express + AI API</p>
+        </footer>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal" style="display: none;">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2>⚙️ 模型设置</h2>
+                <button class="modal-close" id="closeSettingsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Config List -->
+                <div class="setting-group">
+                    <h3>📋 配置列表</h3>
+                    <div class="config-list" id="configList">
+                        <!-- Config items will be rendered here -->
+                    </div>
+                    <div class="config-actions">
+                        <button id="addConfigBtn" class="btn btn-secondary btn-small">
+                            <span class="btn-icon">➕</span>
+                            <span>新建配置</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Config Editor -->
+                <div class="setting-group" id="configEditor">
+                    <h3>🔧 编辑配置: <span id="currentConfigName">default</span></h3>
+                    
+                    <!-- Model Type Selection -->
+                    <div class="setting-sub-group">
+                        <h4>模型类型</h4>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="modelType" value="local" checked>
+                                <span class="radio-text">
+                                    <strong>本地模型</strong>
+                                    <small>LMStudio, Ollama 等本地部署的模型</small>
+                                </span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="modelType" value="api">
+                                <span class="radio-text">
+                                    <strong>API 模型</strong>
+                                    <small>OpenAI, DeepSeek 等云端 API</small>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Local Model Settings -->
+                    <div class="setting-sub-group" id="localSettings">
+                        <h4>本地模型配置</h4>
+                        <div class="form-group">
+                            <label for="localApiUrl">API 地址</label>
+                            <input type="text" id="localApiUrl" placeholder="http://localhost:1234/v1/chat/completions">
+                            <small>LMStudio 默认: http://localhost:1234/v1/chat/completions</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="localModelName">模型名称</label>
+                            <input type="text" id="localModelName" placeholder="local-model">
+                            <small>本地模型通常使用任意名称即可</small>
+                        </div>
+                    </div>
+
+                    <!-- API Model Settings -->
+                    <div class="setting-sub-group" id="apiSettings" style="display: none;">
+                        <h4>API 模型配置</h4>
+                        <div class="form-group">
+                            <label for="apiProvider">API 提供商</label>
+                            <select id="apiProvider">
+                                <option value="openai">OpenAI</option>
+                                <option value="deepseek">DeepSeek</option>
+                                <option value="anthropic">Anthropic (Claude)</option>
+                                <option value="custom">自定义</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="apiKey">API Key</label>
+                            <div class="input-with-toggle">
+                                <input type="password" id="apiKey" placeholder="sk-...">
+                                <button type="button" class="toggle-visibility" id="toggleApiKey">👁️</button>
+                            </div>
+                            <small>您的 API 密钥将安全存储在本地</small>
+                        </div>
+                        <div class="form-group" id="customApiUrlGroup" style="display: none;">
+                            <label for="customApiUrl">自定义 API 地址</label>
+                            <input type="text" id="customApiUrl" placeholder="https://api.example.com/v1/chat/completions">
+                        </div>
+                        <div class="form-group" id="apiModelSelectGroup">
+                            <label for="apiModelName">模型名称</label>
+                            <select id="apiModelName">
+                                <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                                <option value="gpt-4">gpt-4</option>
+                                <option value="gpt-4-turbo">gpt-4-turbo</option>
+                                <option value="gpt-4o">gpt-4o</option>
+                                <option value="gpt-4o-mini">gpt-4o-mini</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="customModelNameGroup" style="display: none;">
+                            <label for="customModelName">自定义模型名称</label>
+                            <input type="text" id="customModelName" placeholder="model-name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelSettingsBtn">取消</button>
+                <button class="btn btn-primary" id="saveSettingsBtn">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Config Modal -->
+    <div class="modal-overlay" id="addConfigModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>➕ 新建配置</h2>
+                <button class="modal-close" id="closeAddConfigBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newConfigName">配置名称</label>
+                    <input type="text" id="newConfigName" placeholder="例如: GPT-4, DeepSeek, 本地模型等">
+                    <small>请输入一个易于识别的配置名称</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelAddConfigBtn">取消</button>
+                <button class="btn btn-primary" id="confirmAddConfigBtn">创建</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

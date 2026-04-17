@@ -1,0 +1,44 @@
+{
+  "configs": {
+    "default": {
+      "type": "local",
+      "local": {
+        "apiUrl": "http://192.168.190.103:3345/v1/chat/completions",
+        "modelName": "qwen3.6-35b-a3b-ud"
+      },
+      "api": {
+        "provider": "custom",
+        "apiKey": "pk-601cb573-53ca-4628-b739-a579699b9276",
+        "apiUrl": "https://modelservice.jdcloud.com/coding/openai/v1",
+        "modelName": "jd"
+      }
+    },
+    "test-config": {
+      "type": "local",
+      "local": {
+        "apiUrl": "http://localhost:1234/v1/chat/completions",
+        "modelName": "test"
+      },
+      "api": {
+        "provider": "openai",
+        "apiKey": "",
+        "apiUrl": "https://api.openai.com/v1/chat/completions",
+        "modelName": "gpt-3.5-turbo"
+      }
+    },
+    "jd": {
+      "type": "api",
+      "local": {
+        "apiUrl": "http://localhost:1234/v1/chat/completions",
+        "modelName": "local-model"
+      },
+      "api": {
+        "provider": "custom",
+        "apiKey": "pk-601cb573-53ca-4628-b739-a579699b9276",
+        "apiUrl": "https://modelservice.jdcloud.com/coding/openai/v1",
+        "modelName": "Kimi-K2.5"
+      }
+    }
+  },
+  "activeConfig": "default"
+}
