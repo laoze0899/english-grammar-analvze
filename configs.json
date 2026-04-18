@@ -34,7 +34,7 @@
       },
       "api": {
         "provider": "custom",
-        "apiKey": "pk-601cb573-53ca-4628-b739-a579699b9276",
+        "apiKey": "",
         "apiUrl": "https://modelservice.jdcloud.com/coding/openai/v1",
         "modelName": "Kimi-K2.5"
       }
